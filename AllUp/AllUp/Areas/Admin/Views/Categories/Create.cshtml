@@ -1,0 +1,102 @@
+﻿@*@using static System.Collections.Specialized.BitVector32*@
+@model Category
+<div class=" row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                  Create Category
+                </h2>
+           
+            </div>
+            <div class="body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <input asp-for="Name" class="form-control">
+                            <label class="form-label" asp-for="Name"></label>
+
+                        </div>
+                        <div>
+                            <span asp-validation-for="Name" class="font-bold col-red" >  </span>
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line" >
+                            <input asp-for="IsMain" class="filled-in chk-col-brown">
+                            <label asp-for="IsMain">Is Main</label>
+                            
+
+                        </div>
+                        <div>
+                            <span asp-validation-for="IsMain" class="font-bold col-red">  </span>
+                        </div>
+                    </div>
+                    <div id="PhotoBox" class="form-group form-float" >
+                        <div class="form-line">
+                            <label asp-for="Photo"> </label>
+                            <input asp-for="Photo" class="filled-in chk-col-brown">
+                          
+
+                        </div>
+                        <div>
+                            <span asp-validation-for="Photo" class="font-bold col-red">  </span>
+                        </div>
+                    </div>
+
+                    <div class="" id="MainCatBox" >
+                        <p>
+                            <b>Select Main Category</b>
+                        </p>
+                        <select class="form-control show-tick" name="mainCatId">
+                            @foreach (Category cat in ViewBag.MainCategories)
+                            {
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+                            
+                           
+                        </select>
+
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary m-t-15 waves-effect">SUBMIT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section CSS{
+    <style>
+        .dropdown-menu.inner{
+            max-height:200px !important
+        }
+    </style>
+    <link asp-append-version="true" href="~/admin/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+}
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        if ($('#IsMain').prop('checked')) {
+            $("#PhotoBox").css("display", "block")
+            $("#MainCatBox").css("display", "none")
+        }
+        else {
+            $("#PhotoBox").css("display", "none")
+            $("#MainCatBox").css("display", "block")
+        }
+        $(document).on("change", "#IsMain", function () {
+            if ($('#IsMain').prop('checked')) {
+                $("#PhotoBox").css("display", "block")
+                $("#MainCatBox").css("display", "none")
+            }
+            else{
+                $("#PhotoBox").css("display", "none")
+                $("#MainCatBox").css("display", "block")
+            }
+        
+        })
+      
+    </script>
+    }
+
+

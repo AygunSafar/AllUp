@@ -1,0 +1,95 @@
+﻿@model List<Product>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body" style="padding:20px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+                    <h4 class="card-title">Products</h4>
+                    <a class="btn btn-primary text-white mx-2 btn-rounded" asp-action="Create">Create</a>
+
+                </div>
+
+                <div class="table-responsive pt-3">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Image
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    Availability
+                                </th>
+                                <th>
+                                    Categories
+                                </th>
+
+                                <th class="text-right">
+                                    Actions
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Product item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <img style="width:80px; height:80px;object-fit:cover" src="~/assets/images/product/@item.ProductImages.FirstOrDefault().Image">
+                                    </td>
+                                    <td>
+                                        @item.Name
+                                    </td>
+                                    <td>
+                                        @item.Price
+                                    </td>
+                                   
+                                    <td>
+                                        @if (item.ProductDetail.HasStock)
+                                        {
+                                            <div class="text-success">In stock</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-danger" >Out of Stock</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (ProductCategory productCategory in item.ProductCategories)
+                                        {
+                                            <div>@productCategory.Category.Name</div>
+                                        }
+                                    </td>
+                                   
+
+                                    <td>
+                                        <div class="d-flex justify-content-end ">
+                                            <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-warning text-white mx-2 btn-rounded">Detail</a>
+                                            <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-success text-white mx-2 btn-rounded">Update</a>
+                                                 @if (item.IsDeactive)
+                                        {
+                                        <a asp-action="Activity" asp-route-id="@item.Id" class="btn btn-success text-white mx-2 btn-rounded">Activate</a>
+                                        }
+                                        else
+                                        {
+                                        <a asp-action="Activity" asp-route-id="@item.Id" class="btn btn-danger text-white mx-2 btn-rounded">Deactivate</a>
+
+                                        }
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
