@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\OneDrive\\Desktop\\Asp.Net folder\\AllUp\\AllUp\\AllUp.csproj": {}
+    "C:\\Users\\USER\\OneDrive\\Desktop\\AllUp\\AllUp\\AllUp\\AllUp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\OneDrive\\Desktop\\Asp.Net folder\\AllUp\\AllUp\\AllUp.csproj": {
+    "C:\\Users\\USER\\OneDrive\\Desktop\\AllUp\\AllUp\\AllUp\\AllUp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\OneDrive\\Desktop\\Asp.Net folder\\AllUp\\AllUp\\AllUp.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\OneDrive\\Desktop\\AllUp\\AllUp\\AllUp\\AllUp.csproj",
         "projectName": "AllUp",
-        "projectPath": "C:\\Users\\USER\\OneDrive\\Desktop\\Asp.Net folder\\AllUp\\AllUp\\AllUp.csproj",
+        "projectPath": "C:\\Users\\USER\\OneDrive\\Desktop\\AllUp\\AllUp\\AllUp\\AllUp.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\OneDrive\\Desktop\\Asp.Net folder\\AllUp\\AllUp\\obj\\",
+        "outputPath": "C:\\Users\\USER\\OneDrive\\Desktop\\AllUp\\AllUp\\AllUp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -3,6 +3,7 @@ using AllUp.Helpers;
 using AllUp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using System.Security.Cryptography;
 
 namespace AllUp.Areas.Admin.Controllers
@@ -106,6 +107,12 @@ namespace AllUp.Areas.Admin.Controllers
         {
             ProductImage? productImage = await _db.ProductImages.Include(x=>x.Product).ThenInclude(x=>x.ProductImages).FirstOrDefaultAsync(x => x.Id == proImgId);
             int productImagesCount =productImage.Product.ProductImages.Count;
+            string path = Path.Combine(_env.WebRootPath, "assets","images","product",productImage.Image);
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            
             _db.ProductImages.Remove(productImage);
             if (productImagesCount == 2)
             {
@@ -121,17 +128,89 @@ namespace AllUp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Product? product = await _db.Products.Include(x=>x.ProductCategories).ThenInclude(x=>x.Category).ThenInclude(x=>x.Children).Include(x=>x.ProductImages).FirstOrDefaultAsync(x=>x.Id==id);
-            if (product == null)
+            Product? dbProduct = await _db.Products.Include(x=>x.ProductCategories).ThenInclude(x=>x.Category).ThenInclude(x=>x.Children).Include(x=>x.ProductImages).Include(x=>x.ProductDetail).FirstOrDefaultAsync(x=>x.Id==id);
+            if (dbProduct == null)
             {
                 return BadRequest();
             }
             ViewBag.MainCategories = await _db.Categories.Where(x => x.IsMain).ToListAsync();
 
 
-            return View(product);
+            return View(dbProduct);
         }
-           
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int? id,Product product, int? mainCatId, int? childCatId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            Product? dbProduct = await _db.Products.Include(x => x.ProductCategories).ThenInclude(x => x.Category).ThenInclude(x => x.Children).Include(x => x.ProductImages).Include(x=>x.ProductDetail).FirstOrDefaultAsync(x => x.Id == id);
+            if (dbProduct == null)
+            {
+                return BadRequest();
+            }
+            ViewBag.MainCategories = await _db.Categories.Where(x => x.IsMain).ToListAsync();
+
+
+            if (mainCatId == null)
+            {
+                return BadRequest();
+            }
+            List<ProductImage> productImages = new List<ProductImage>();
+            if( product.Photos != null)
+            {
+                foreach (IFormFile Photo in product.Photos)
+                {
+                    if (!Photo.IsImage())
+                    {
+                        ModelState.AddModelError("Photo", " sekil elave edin");
+                        return View();
+                    }
+                    if (Photo.IsOlder1MB())
+                    {
+                        ModelState.AddModelError("Photo", " 1 mb");
+                        return View();
+                    }
+                    string folder = Path.Combine(_env.WebRootPath, "assets", "images", "product");
+                    ProductImage productImage = new ProductImage
+                    {
+                        Image = await Photo.SaveFileAsync(folder),
+
+                    };
+                    productImages.Add(productImage);
+
+                };
+            }
+            
+            List<ProductCategory> productCategories = new List<ProductCategory>();
+
+            ProductCategory mainProductCategory = new ProductCategory
+            {
+                CategoryId = (int)mainCatId,
+
+            };
+
+            productCategories.Add(mainProductCategory);
+
+            if (childCatId != null)
+            {
+                ProductCategory childProductCategory = new ProductCategory
+                {
+                    CategoryId = (int)childCatId,
+                };
+                productCategories.Add(childProductCategory);
+            }
+
+            dbProduct.ProductCategories = productCategories;
+            dbProduct.ProductImages.AddRange(productImages);
+          
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
     }
+    
 }
 
